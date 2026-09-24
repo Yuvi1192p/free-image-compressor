@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Sitemap: https://yuvi1192p.github.io/free-image-compressor/sitemap.xml
+
+# Free Image Compressor - Robots.txt
+# GitHub Pages hosted at https://yuvi1192p.github.io/free-image-compressor/

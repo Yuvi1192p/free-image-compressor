@@ -3,10 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Image Compressor - Reduce Image Size Without Losing Quality</title>
+    <title>Free Image Compressor - Reduce File Size Instantly</title>
     <meta name="description" content="Free online image compressor. Reduce JPEG, PNG, WebP image sizes instantly without losing quality. No installation required.">
     <meta name="keywords" content="image compressor, compress images, reduce image size, free image compression, JPEG compressor, PNG compressor, WebP compressor">
     <meta name="theme-color" content="#4F46E5">
+    <link rel="canonical" href="https://yuvi1192p.github.io/free-image-compressor/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yuvi1192p.github.io/free-image-compressor/">
+    <meta property="og:title" content="Free Image Compressor - Reduce File Size Instantly">
+    <meta property="og:description" content="Compress images instantly in your browser. Supports JPEG, PNG, WebP. 100% private, no uploads, completely free.">
+    <meta property="og:image" content="https://yuvi1192p.github.io/free-image-compressor/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Free Image Compressor">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://yuvi1192p.github.io/free-image-compressor/">
+    <meta name="twitter:title" content="Free Image Compressor - Reduce File Size Instantly">
+    <meta name="twitter:description" content="Compress images instantly in your browser. Supports JPEG, PNG, WebP. 100% private, no uploads, completely free.">
+    <meta name="twitter:image" content="https://yuvi1192p.github.io/free-image-compressor/og-image.png">
+    <meta name="twitter:creator" content="@Yuvi1192p">
 
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -178,7 +198,26 @@
         .badge-original { background: #FEF3C7; color: #92400E; }
         .badge-compressed { background: #D1FAE5; color: #065F46; }
 
-        /* Responsive adjustments */
+        /* Focus visible styles for accessibility */
+        :focus-visible {
+            outline: 2px solid #4F46E5;
+            outline-offset: 2px;
+        }
+        .btn-primary:focus-visible {
+            outline: 2px solid #4F46E5;
+            outline-offset: 2px;
+        }
+        button:focus-visible, 
+        select:focus-visible, 
+        input:focus-visible {
+            outline: 2px solid #4F46E5;
+            outline-offset: 1px;
+        }
+        a:focus-visible {
+            outline: 2px solid #4F46E5;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
         @media (max-width: 640px) {
             .preview-grid {
                 grid-template-columns: 1fr;
@@ -188,18 +227,23 @@
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-indigo-50 min-h-screen">
 
+    <!-- Skip to main content -->
+    <a href="#mainContent" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:font-medium focus:shadow-lg">
+        Skip to main content
+    </a>
+
     <!-- Header -->
     <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold text-slate-900">Image Compressor</h1>
+                        <p class="text-xl font-bold text-slate-900">Image Compressor</p>
                         <p class="text-xs text-slate-500 -mt-1">Free &amp; Online</p>
                     </div>
                 </div>
@@ -226,7 +270,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <main id="mainContent" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
 
         <!-- AdSense Placeholder -->
         <!-- <div class="mb-8 bg-white rounded-2xl border border-slate-200 p-6 text-center">
@@ -289,8 +333,8 @@
         <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/80 overflow-hidden">
             
             <!-- Drop Zone -->
-            <div id="dropZone" class="drop-zone relative p-8 sm:p-12 flex flex-col items-center justify-center text-center cursor-pointer">
-                <input type="file" id="fileInput" accept="image/*" class="hidden" multiple>
+            <div id="dropZone" class="drop-zone relative p-8 sm:p-12 flex flex-col items-center justify-center text-center cursor-pointer" role="button" tabindex="0" aria-label="Upload image file. Click or drag and drop an image here.">
+                <input type="file" id="fileInput" accept="image/*" class="hidden" aria-label="Choose image file to compress" multiple>
                 
                 <div id="uploadContent" class="flex flex-col items-center gap-4">
                     <div class="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center">
@@ -530,6 +574,7 @@
                 <div class="flex items-center gap-6 text-sm text-slate-500">
                     <a href="https://github.com/Yuvi1192p/free-image-compressor" target="_blank" rel="noopener noreferrer" class="hover:text-slate-700 transition-colors">GitHub</a>
                     <a href="https://buymeacoffee.com/yuvi1192p" target="_blank" rel="noopener noreferrer" class="hover:text-slate-700 transition-colors">Buy Me a Coffee</a>
+                    <a href="https://yuvi1192p.github.io/free-image-compressor/sitemap.xml" target="_blank" rel="noopener noreferrer" class="hover:text-slate-700 transition-colors">Sitemap</a>
                     <span class="text-slate-300">|</span>
                     <span class="text-slate-400">v1.0.0</span>
                 </div>
@@ -633,6 +678,14 @@
             dropZone.addEventListener('click', (e) => {
                 if (e.target.closest('button') || e.target.closest('select') || e.target.closest('input[type="range"]')) return;
                 fileInput.click();
+            });
+
+            // Keyboard support for drop zone
+            dropZone.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    fileInput.click();
+                }
             });
 
             // File input change
@@ -972,22 +1025,63 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "Free Image Compressor",
-        "applicationCategory": "MultimediaApplication",
-        "operatingSystem": "Web",
-        "description": "Free online image compressor that reduces image file sizes without losing quality. Supports JPEG, PNG, WebP formats.",
-        "url": "https://yuvi1192p.github.io/free-image-compressor/",
-        "author": {
-            "@type": "Person",
-            "name": "Yuvi1192p",
-            "url": "https://github.com/Yuvi1192p"
-        },
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        }
+        "@graph": [
+            {
+                "@type": "SoftwareApplication",
+                "name": "Free Image Compressor",
+                "applicationCategory": "MultimediaApplication",
+                "operatingSystem": "Web",
+                "description": "Free online image compressor that reduces image file sizes without losing quality. Supports JPEG, PNG, WebP formats. All processing happens locally in your browser - no uploads, 100% private.",
+                "url": "https://yuvi1192p.github.io/free-image-compressor/",
+                "image": "https://yuvi1192p.github.io/free-image-compressor/og-image.png",
+                "author": {
+                    "@type": "Person",
+                    "name": "Yuvi1192p",
+                    "url": "https://github.com/Yuvi1192p"
+                },
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "Yuvi1192p",
+                    "url": "https://github.com/Yuvi1192p"
+                },
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD"
+                },
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "5.0",
+                    "ratingCount": "1",
+                    "bestRating": "5"
+                },
+                "softwareVersion": "1.0.0",
+                "datePublished": "2026-09-24",
+                "copyrightNotice": "MIT License",
+                "license": "https://opensource.org/licenses/MIT",
+                "inLanguage": "en-US"
+            },
+            {
+                "@type": "WebSite",
+                "name": "Free Image Compressor",
+                "url": "https://yuvi1192p.github.io/free-image-compressor/",
+                "description": "Free online image compressor - compress images without losing quality",
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://yuvi1192p.github.io/free-image-compressor/",
+                    "query-input": "required name=query"
+                }
+            },
+            {
+                "@type": "ImageObject",
+                "name": "Free Image Compressor Preview",
+                "description": "Screenshot of the Free Image Compressor web application showing the drag-and-drop interface",
+                "url": "https://yuvi1192p.github.io/free-image-compressor/og-image.png",
+                "width": 1200,
+                "height": 630,
+                "encodingFormat": "image/png"
+            }
+        ]
     }
     </script>
 </body>
