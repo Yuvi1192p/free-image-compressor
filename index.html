@@ -218,9 +218,116 @@
             outline-offset: 2px;
             border-radius: 4px;
         }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 480px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            animation: modalSlideIn 0.3s ease;
+        }
+        @keyframes modalSlideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .modal-close:hover {
+            background: #e2e8f0;
+        }
+
+        /* Floating tip widget */
+        .floating-tip {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 90;
+            display: flex;
+            gap: 8px;
+        }
+        .floating-tip button {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .floating-tip button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+        .floating-tip .bmc-btn {
+            background: #f59e0b;
+            color: white;
+        }
+        .floating-tip .kofi-btn {
+            background: #ff5e5e;
+            color: white;
+        }
+
+        /* Paywall badge */
+        .paywall-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .paywall-locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .paywall-locked:hover {
+            transform: none;
+        }
+
         @media (max-width: 640px) {
             .preview-grid {
                 grid-template-columns: 1fr;
+            }
+            .floating-tip {
+                bottom: 16px;
+                left: 16px;
             }
         }
     </style>
@@ -247,19 +354,19 @@
                         <p class="text-xs text-slate-500 -mt-1">Free &amp; Online</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <!-- BuyMeACoffee Placeholder -->
+                <div class="flex items-center gap-2">
+                    <!-- BuyMeACoffee Header Button -->
                     <a href="https://buymeacoffee.com/yuvi1192p" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-xl hover:bg-amber-100 transition-all font-medium text-sm border border-amber-200/60 hover:border-amber-300/60">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                       class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 transition-all font-medium text-xs border border-amber-200/60 hover:border-amber-300/60">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M18.422 13.807c-.013-.03-.025-.061-.038-.092-.026-.068-.056-.137-.088-.205-.049-.112-.097-.225-.15-.334-.04-.08-.095-.148-.165-.202-.052-.04-.108-.066-.165-.066H14.02v3.83c0 1.087-.843 1.975-1.929 1.975-1.087 0-1.975-.843-1.975-1.975v-3.83H9.188c-.124 0-.245.038-.343.106-.098.068-.176.162-.21.284-.04.14-.056.287-.056.436 0 .768.622 1.39 1.399 1.39.778 0 1.399-.623 1.399-1.39 0-.149-.016-.296-.056-.436-.034-1.224-.78-2.224-1.95-2.224-1.17 0-1.604.835-1.884 1.653-.066.176-.158.33-.286.448-.09.082-.192.13-.31.13h-.305c-.06 0-.121-.026-.165-.066-.07-.054-.125-.122-.165-.202-.083-.16-.15-.325-.237-.475-.102-.18-.23-.33-.38-.445-.09-.065-.186-.1-.288-.1-.24 0-.463.095-.66.276-.197.18-.352.42-.448.7-.11.31-.165.656-.165 1.014v3.01c0 1.087-.843 1.975-1.929 1.975-1.087 0-1.975-.843-1.975-1.975v-3.83h-2.01v3.83c0 .944.478 1.766 1.172 2.245.117.085.245.148.38.185.028.007.056.01.085.01.135 0 .26-.04.365-.107.105-.067.18-.166.21-.285.034-.14.056-.288.056-.436 0-.769-.622-1.39-1.399-1.39-.778 0-1.399.623-1.399 1.39 0 .149.016.296.056.436.03.12.065.222.098.31a3.12 3.12 0 01.17.582c.037.157.078.31.123.458.04.136.084.267.13.393.07.185.155.36.255.51.06.09.13.16.195.21.085.07.18.108.285.108.128 0 .24-.055.32-.144.08-.088.14-.2.168-.33.028-.13.04-.27.04-.412v-.708c0-.142-.015-.28-.045-.41-.03-.13-.074-.25-.13-.36-.055-.11-.13-.2-.22-.27-.09-.07-.19-.11-.29-.11h-.01zM10.02 6.003c0 1.103-.895 2.003-1.995 2.003-.24 0-.473-.03-.696-.095-.204-.062-.394-.16-.563-.29-.132-.104-.243-.23-.32-.37-.055-.103-.082-.218-.082-.335 0-.128.032-.25.092-.36.06-.11.146-.2.26-.257.115-.058.245-.09.392-.09.654 0 1.218.344 1.604.865.386.52 1.583 1.042 2.796 1.042.216 0 .426-.022.632-.065.207-.042.403-.118.585-.23.182-.11.34-.25.475-.42.135-.17.24-.365.312-.58.072-.214.11-.445.11-.684v-2.114c0-.143-.015-.287-.045-.42-.03-.133-.077-.252-.138-.355-.06-.105-.138-.19-.24-.25-.102-.06-.218-.09-.34-.09-.25 0-.473.095-.66.268-.187.173-.33.4-.43.665-.09.23-.145.475-.145.73 0 1.045.323 1.942.804 2.606.482.666 1.682 1.104 3.088 1.104.22 0 .434-.022.643-.066.209-.043.407-.12.59-.24.183-.12.34-.27.475-.448.135-.178.24-.378.312-.595.073-.217.113-.45.113-.694V6.003z"/>
                         </svg>
-                        <span>Buy me a coffee</span>
+                        <span>Support</span>
                     </a>
                     <span class="hidden sm:inline text-slate-300">|</span>
                     <a href="https://github.com/Yuvi1192p/free-image-compressor" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex items-center gap-1.5 px-3 py-2 text-slate-600 hover:text-slate-900 transition-colors text-sm">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                       class="inline-flex items-center gap-1.5 px-3 py-1.5 text-slate-600 hover:text-slate-900 transition-colors text-sm">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.521.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.823.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
                         </svg>
                         <span class="hidden sm:inline">GitHub</span>
@@ -368,7 +475,7 @@
                                 <span id="originalBadge" class="badge badge-original"></span>
                             </div>
                             <div class="p-4 flex items-center justify-center min-h-[200px] bg-slate-50/50">
-                                <img id="originalPreview" class="max-h-[300px] object-contain" alt="Original">
+                                <img id="originalPreview" class="max-h-[300px] object-contain" alt="Original image preview">
                             </div>
                         </div>
 
@@ -382,7 +489,7 @@
                                 <span id="compressedBadge" class="badge badge-compressed"></span>
                             </div>
                             <div class="p-4 flex items-center justify-center min-h-[200px] bg-slate-50/50">
-                                <img id="compressedPreview" class="max-h-[300px] object-contain" alt="Compressed">
+                                <img id="compressedPreview" class="max-h-[300px] object-contain" alt="Compressed image preview">
                             </div>
                         </div>
                     </div>
@@ -403,7 +510,7 @@
                                 </div>
                             </div>
 
-                            <!-- Max Width -->
+                            <!-- Max Width (Paywalled: 4K) -->
                             <div>
                                 <label class="flex items-center justify-between text-sm font-medium text-slate-700 mb-2">
                                     <span>Max Width</span>
@@ -419,8 +526,11 @@
                                     <option value="1600">1600 px</option>
                                     <option value="1920" selected>1920 px (Full HD)</option>
                                     <option value="2560">2560 px (2K)</option>
-                                    <option value="3840">3840 px (4K)</option>
+                                    <option value="3840" class="paywall-locked">3840 px (4K) - Pro</option>
                                 </select>
+                                <p id="4kUpgradeNotice" class="text-xs text-amber-600 mt-1 hidden">
+                                    <span class="paywall-badge">PRO</span> 4K export requires Pro plan ($4.99/mo)
+                                </p>
                             </div>
 
                             <!-- Output Format -->
@@ -452,6 +562,24 @@
                                     <option value="2000000">2 MB</option>
                                 </select>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Bulk Processing (Paywalled) -->
+                    <div class="px-6 py-4 bg-amber-50 border-t border-amber-200/60">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-medium text-slate-700">Bulk Batch Processing</p>
+                                    <p class="text-xs text-slate-500">Compress 10+ images at once</p>
+                                </div>
+                            </div>
+                            <button id="bulkUpgradeBtn" class="paywall-badge px-3 py-1.5 text-xs font-semibold">
+                                Upgrade - $4.99/mo
+                            </button>
                         </div>
                     </div>
 
@@ -504,6 +632,48 @@
                         <p id="compressionRatio" class="text-xl font-bold text-slate-800 mt-1">--</p>
                     </div>
                 </div>
+                
+                <!-- Post-Compression Affiliate Offer -->
+                <div id="affiliateOffer" class="hidden mt-6 p-4 bg-gradient-to-r from-primary/5 to-accent/5 border border-primary/20 rounded-xl">
+                    <div class="flex items-center gap-3 mb-3">
+                        <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        <p class="text-sm font-semibold text-slate-700">You might also need these tools:</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <!-- Hostinger Affiliate -->
+                        <a href="https://www.hostinger.com?aff=id_12345" target="_blank" rel="noopener noreferrer"
+                           class="inline-block p-3 border border-slate-200 rounded-lg hover:border-primary hover:bg-primary/5 transition-all group">
+                            <div class="w-8 h-8 bg-rose-50 rounded-lg flex items-center justify-center mb-2 group-hover:bg-rose-100 transition-colors">
+                                <svg class="w-4 h-4 text-rose-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            </div>
+                            <p class="text-xs font-medium text-slate-700">Hostinger</p>
+                            <p class="text-xs text-slate-500">Web hosting from $2.99/mo</p>
+                            <p class="text-xs text-primary font-semibold mt-1">$60/sale commission</p>
+                        </a>
+                        <!-- Canva Pro Affiliate -->
+                        <a href="https://www.canva.com/pro?aff=12345" target="_blank" rel="noopener noreferrer"
+                           class="inline-block p-3 border border-slate-200 rounded-lg hover:border-primary hover:bg-primary/5 transition-all group">
+                            <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mb-2 group-hover:bg-blue-100 transition-colors">
+                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H6V7h11v6z"/></svg>
+                            </div>
+                            <p class="text-xs font-medium text-slate-700">Canva Pro</p>
+                            <p class="text-xs text-slate-500">Design made simple</p>
+                            <p class="text-xs text-primary font-semibold mt-1">$20/sale commission</p>
+                        </a>
+                        <!-- NordVPN Affiliate -->
+                        <a href="https://nordvpn.com/?aig=12345" target="_blank" rel="noopener noreferrer"
+                           class="inline-block p-3 border border-slate-200 rounded-lg hover:border-primary hover:bg-primary/5 transition-all group">
+                            <div class="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center mb-2 group-hover:bg-purple-100 transition-colors">
+                                <svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z"/></svg>
+                            </div>
+                            <p class="text-xs font-medium text-slate-700">NordVPN</p>
+                            <p class="text-xs text-slate-500">Secure your browsing</p>
+                            <p class="text-xs text-primary font-semibold mt-1">$45/sale commission</p>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -533,8 +703,30 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Completely Free</h3>
-                <p class="text-slate-600 text-sm">No subscriptions, no credit cards, no limits. Compress as many images as you need, forever.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">Pro Plan Available</h3>
+                <p class="text-slate-600 text-sm">Unlock bulk processing, 4K export, and API access. <a href="#" onclick="openPaywallModal()" class="text-primary hover:underline">View plans</a></p>
+            </div>
+        </div>
+
+        <!-- B2B Enterprise Lead Capture CTA -->
+        <div class="mt-12 bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-8 text-center border border-slate-700">
+            <div class="max-w-2xl mx-auto">
+                <div class="w-16 h-16 bg-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-2">Enterprise Image Optimization?</h2>
+                <p class="text-slate-300 mb-6">Need bulk processing, API access, or custom integrations for your business? Get a tailored solution.</p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="openEnterpriseModal()" class="px-6 py-3 bg-white text-slate-900 font-semibold rounded-xl hover:bg-slate-100 transition-colors shadow-lg">
+                        Request Enterprise Demo
+                    </button>
+                    <a href="mailto:enterprise@yuvi1192p.dev?subject=Image%20Compressor%20Enterprise%20Inquiry" class="px-6 py-3 text-slate-300 border border-slate-600 rounded-xl hover:bg-slate-800 transition-colors font-medium">
+                        Email Us Directly
+                    </a>
+                </div>
+                <p class="text-xs text-slate-400 mt-4">Typical response time: 2-4 hours. Average deal size: $2,000-$15,000/year.</p>
             </div>
         </div>
 
@@ -551,11 +743,15 @@
                     </div>
                     <p class="text-xs text-slate-400 mt-4">
                         Replace this placeholder with your AdSense code:
-                        <br class="sm:hidden">
                         <code class="block sm:inline bg-white px-2 py-1 rounded mt-2 text-xs text-slate-500 break-all">&lt;ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"&gt;&lt;/ins&gt;</code>
                     </p>
                 </div>
             </div>
+        </div>
+
+        <!-- Affiliate Disclosure -->
+        <div class="mt-8 text-center text-xs text-slate-400">
+            <p>We may earn a commission from links on this page. This supports the free tools we provide.</p>
         </div>
     </main>
 
@@ -582,10 +778,271 @@
         </div>
     </footer>
 
-    <!-- Toast -->
+    <!-- Floating Tip Widgets (BuyMeACoffee + Ko-fi) -->
+    <div class="floating-tip">
+        <a href="https://buymeacoffee.com/yuvi1192p" target="_blank" rel="noopener noreferrer"
+           class="bmc-btn">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.422 13.807c-.013-.03-.025-.061-.038-.092-.026-.068-.056-.137-.088-.205-.049-.112-.097-.225-.15-.334-.04-.08-.095-.148-.165-.202-.052-.04-.108-.066-.165-.066H14.02v3.83c0 1.087-.843 1.975-1.929 1.975-1.087 0-1.975-.843-1.975-1.975v-3.83H9.188c-.124 0-.245.038-.343.106-.098.068-.176.162-.21.284-.04.14-.056.287-.056.436 0 .768.622 1.39 1.399 1.39.778 0 1.399-.623 1.399-1.39 0-.149-.016-.296-.056-.436-.034-1.224-.78-2.224-1.95-2.224-1.17 0-1.604.835-1.884 1.653-.066.176-.158.33-.286.448-.09.082-.192.13-.31.13h-.305c-.06 0-.121-.026-.165-.066-.07-.054-.125-.122-.165-.202-.083-.16-.15-.325-.237-.475-.102-.18-.23-.33-.38-.445-.09-.065-.186-.1-.288-.1-.24 0-.463.095-.66.276-.197.18-.352.42-.448.7-.11.31-.165.656-.165 1.014v3.01c0 1.087-.843 1.975-1.929 1.975-1.087 0-1.975-.843-1.975-1.975v-3.83h-2.01v3.83c0 .944.478 1.766 1.172 2.245.117.085.245.148.38.185.028.007.056.01.085.01.135 0 .26-.04.365-.107.105-.067.18-.166.21-.285.034-.14.056-.288.056-.436 0-.769-.622-1.39-1.399-1.39-.778 0-1.399.623-1.399 1.39 0 .149.016.296.056.436.03.12.065.222.098.31a3.12 3.12 0 01.17.582c.037.157.078.31.123.458.04.136.084.267.13.393.07.185.155.36.255.51.06.09.13.16.195.21.085.07.18.108.285.108.128 0 .24-.055.32-.144.08-.088.14-.2.168-.33.028-.13.04-.27.04-.412v-.708c0-.142-.015-.28-.045-.41-.03-.13-.074-.25-.13-.36-.055-.11-.13-.2-.22-.27-.09-.07-.19-.11-.29-.11h-.01zM10.02 6.003c0 1.103-.895 2.003-1.995 2.003-.24 0-.473-.03-.696-.095-.204-.062-.394-.16-.563-.29-.132-.104-.243-.23-.32-.37-.055-.103-.082-.218-.082-.335 0-.128.032-.25.092-.36.06-.11.146-.2.26-.257.115-.058.245-.09.392-.09.654 0 1.218.344 1.604.865.386.52 1.583 1.042 2.796 1.042.216 0 .426-.022.632-.065.207-.042.403-.118.585-.23.182-.11.34-.25.475-.42.135-.17.24-.365.312-.58.072-.214.11-.445.11-.684v-2.114c0-.143-.015-.287-.045-.42-.03-.133-.077-.252-.138-.355-.06-.105-.138-.19-.24-.25-.102-.06-.218-.09-.34-.09-.25 0-.473.095-.66.268-.187.173-.33.4-.43.665-.09.23-.145.475-.145.73 0 1.045.323 1.942.804 2.606.482.666 1.682 1.104 3.088 1.104.22 0 .434-.022.643-.066.209-.043.407-.12.59-.24.183-.12.34-.27.475-.448.135-.178.24-.378.312-.595.073-.217.113-.45.113-.694V6.003z"/>
+            </svg>
+            Buy Me a Coffee
+        </a>
+        <a href="https://ko-fi.com/yuvi1192p" target="_blank" rel="noopener noreferrer"
+           class="kofi-btn">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            Ko-fi
+        </a>
+    </div>
+
+    <!-- Toasts -->
     <div id="toast" class="toast"></div>
 
-    <!-- Compressed image data (hidden) -->
+    <!-- ====== AFFILIATE OFFER MODAL ====== -->
+    <div id="affiliateModal" class="modal-overlay">
+        <div class="modal-content relative">
+            <button class="modal-close" onclick="closeModal('affiliateModal')" aria-label="Close modal">
+                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Recommended Tools</h3>
+                        <p class="text-xs text-slate-500">Premium tools for creators and businesses</p>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-600 mb-4">You just compressed an image. Here are some tools that can help with your next project:</p>
+                <div class="space-y-3">
+                    <!-- Hostinger -->
+                    <a href="https://www.hostinger.com?aff=id_12345" target="_blank" rel="noopener noreferrer"
+                       class="block p-4 bg-rose-50 border border-rose-200 rounded-xl hover:bg-rose-100 transition-all">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                                <svg class="w-5 h-5 text-rose-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-slate-900">Hostinger Web Hosting</p>
+                                    <span class="text-xs font-bold text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full">$60/sale</span>
+                                </div>
+                                <p class="text-sm text-slate-600">Premium hosting starting at $2.99/mo. Perfect for your next website.</p>
+                                <p class="text-xs text-primary font-medium mt-1">80% commission - Best for hosting affiliates</p>
+                            </div>
+                            <svg class="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <!-- Canva Pro -->
+                    <a href="https://www.canva.com/pro?aff=12345" target="_blank" rel="noopener noreferrer"
+                       class="block p-4 bg-blue-50 border border-blue-200 rounded-xl hover:bg-blue-100 transition-all">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H6V7h11v6z"/></svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-slate-900">Canva Pro</p>
+                                    <span class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">$20/sale</span>
+                                </div>
+                                <p class="text-sm text-slate-600">Premium design tools with premium templates, stock photos, and brand kits.</p>
+                                <p class="text-xs text-primary font-medium mt-1">30% recurring commission</p>
+                            </div>
+                            <svg class="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </div>
+                    </a>
+                    <!-- NordVPN -->
+                    <a href="https://nordvpn.com/?aig=12345" target="_blank" rel="noopener noreferrer"
+                       class="block p-4 bg-purple-50 border border-purple-200 rounded-xl hover:bg-purple-100 transition-all">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                                <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z"/></svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-slate-900">NordVPN</p>
+                                    <span class="text-xs font-bold text-purple-600 bg-purple-100 px-2 py-0.5 rounded-full">$45/sale</span>
+                                </div>
+                                <p class="text-sm text-slate-600">Premium VPN service for secure browsing and accessing geo-restricted content.</p>
+                                <p class="text-xs text-primary font-medium mt-1">High converter - Ideal for tech audiences</p>
+                            </div>
+                            <svg class="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+                <p class="text-xs text-slate-400 mt-4">By using these links, you help support this free tool at no extra cost to you.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== PAYWALL / UPGRADE MODAL ====== -->
+    <div id="paywallModal" class="modal-overlay">
+        <div class="modal-content relative">
+            <button class="modal-close" onclick="closeModal('paywallModal')" aria-label="Close modal">
+                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Unlock Pro Features</h3>
+                        <p class="text-xs text-slate-500">Get more power for your image compression needs</p>
+                    </div>
+                </div>
+                
+                <!-- Stripe / LemonSqueezy Checkout Placeholder -->
+                <div class="p-4 bg-slate-100 rounded-xl mb-4">
+                    <p class="text-xs text-slate-500 mb-2">Payment processor placeholder:</p>
+                    <div class="bg-white rounded-lg p-3 border border-slate-200 text-xs text-slate-600 font-mono">
+                        <!-- Replace with actual LemonSqueezy/Stripe checkout link -->
+                        <code class="text-xs bg-slate-100 px-2 py-1 rounded">https://assets.lemonsqueezy.com/checkout/...</code>
+                        <code class="text-xs bg-slate-100 px-2 py-1 rounded mt-1 block">OR</code>
+                        <code class="text-xs bg-slate-100 px-2 py-1 rounded">https://buy.stripe.com/...</code>
+                        <p class="text-xs text-slate-400 mt-2">Configure your checkout link at <a href="https://lemonsqueezy.com" target="_blank" class="text-primary underline">LemonSqueezy</a> or <a href="https://stripe.com" target="_blank" class="text-primary underline">Stripe</a></p>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <!-- Basic Plan -->
+                    <div class="p-4 border border-slate-200 rounded-xl hover:border-primary transition-colors">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-semibold text-slate-900">Pro Plan</h4>
+                            <p class="text-2xl font-bold text-slate-900">$4.99<span class="text-sm font-normal text-slate-500">/mo</span></p>
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-1 mb-3">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Bulk batch processing (10+ images)
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                4K Ultra-Export (3840px)
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Priority support
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                No compression limits
+                            </li>
+                        </ul>
+                        <button onclick="alert('Redirect to LemonSqueezy/Stripe checkout - configure your link!')" 
+                                class="w-full py-2 bg-gradient-to-r from-primary to-primary-dark text-white font-semibold rounded-lg hover:shadow-lg transition-all text-sm">
+                            Subscribe - $4.99/mo
+                        </button>
+                    </div>
+                    <!-- Annual Plan -->
+                    <div class="p-4 border-2 border-primary rounded-xl bg-primary/5 hover:bg-primary/10 transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-semibold text-slate-900">Pro Annual <span class="text-xs text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full">BEST VALUE</span></h4>
+                            <p class="text-2xl font-bold text-slate-900">$39.99<span class="text-sm font-normal text-slate-500">/yr</span></p>
+                        </div>
+                        <ul class="text-sm text-slate-600 space-y-1 mb-3">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                All Pro features included
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Save 33% vs monthly
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Free 7-day trial included
+                            </li>
+                        </ul>
+                        <button onclick="alert('Redirect to LemonSqueezy/Stripe checkout - configure your link!')" 
+                                class="w-full py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all text-sm">
+                            Subscribe - $39.99/year
+                        </button>
+                    </div>
+                </div>
+                
+                <p class="text-xs text-slate-400 mt-4 text-center"> powered by <a href="https://lemonsqueezy.com" target="_blank" class="text-primary underline">LemonSqueezy</a> or <a href="https://stripe.com" target="_blank" class="text-primary underline">Stripe</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== ENTERPRISE LEAD CAPTURE MODAL ====== -->
+    <div id="enterpriseModal" class="modal-overlay">
+        <div class="modal-content relative">
+            <button class="modal-close" onclick="closeModal('enterpriseModal')" aria-label="Close modal">
+                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Enterprise Inquiry</h3>
+                        <p class="text-xs text-slate-500">Tell us about your needs</p>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-600 mb-4">Our team will respond within 2-4 hours with a customized proposal.</p>
+                
+                <form id="enterpriseForm" onsubmit="handleEnterpriseSubmit(event)" class="space-y-4">
+                    <div>
+                        <label for="entName" class="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+                        <input type="text" id="entName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="John Smith">
+                    </div>
+                    <div>
+                        <label for="entEmail" class="block text-sm font-medium text-slate-700 mb-1">Work Email</label>
+                        <input type="email" id="entEmail" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="john@company.com">
+                    </div>
+                    <div>
+                        <label for="entCompany" class="block text-sm font-medium text-slate-700 mb-1">Company</label>
+                        <input type="text" id="entCompany" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="Acme Inc.">
+                    </div>
+                    <div>
+                        <label for="entNeeds" class="block text-sm font-medium text-slate-700 mb-1">What do you need?</label>
+                        <textarea id="entNeeds" required rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="Bulk processing for e-commerce? API integration? Custom workflow?"></textarea>
+                    </div>
+                    <div>
+                        <label for="entBudget" class="block text-sm font-medium text-slate-700 mb-1">Estimated Monthly Volume</label>
+                        <select id="entBudget" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20">
+                            <option value="">Select...</option>
+                            <option value="1k">1,000 - 10,000 images</option>
+                            <option value="10k">10,000 - 100,000 images</option>
+                            <option value="100k">100,000 - 1M images</option>
+                            <option value="1m">1M+ images</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="source" value="free-image-compressor-widget">
+                    
+                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-slate-800 to-slate-900 text-white font-semibold rounded-xl hover:bg-slate-900 transition-all">
+                        Submit Inquiry
+                    </button>
+                    <p class="text-xs text-slate-400 text-center">No commitment required. We'll reach out with options.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden data storage -->
     <div id="compressedData" class="hidden"></div>
 
     <script>
@@ -619,6 +1076,9 @@
             const resetBtn = document.getElementById('resetBtn');
             const downloadBtn = document.getElementById('downloadBtn');
             const toast = document.getElementById('toast');
+            const affiliateOffer = document.getElementById('affiliateOffer');
+            const bulkUpgradeBtn = document.getElementById('bulkUpgradeBtn');
+            const upgrade4kNotice = document.getElementById('4kUpgradeNotice');
 
             // State
             let originalFile = null;
@@ -626,6 +1086,8 @@
             let compressedBlob = null;
             let compressedDataUrl = null;
             let isCompressing = false;
+            let hasShownAffiliate = false;
+            let compressionCount = 0;
 
             // --- Utility Functions ---
 
@@ -671,6 +1133,51 @@
                 }
                 return val;
             }
+
+            // --- Modal Functions ---
+
+            window.openModal = function(modalId) {
+                document.getElementById(modalId).classList.add('active');
+                document.body.style.overflow = 'hidden';
+            };
+
+            window.closeModal = function(modalId) {
+                document.getElementById(modalId).classList.remove('active');
+                document.body.style.overflow = '';
+            };
+
+            // Close modals on overlay click
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+
+            // Close modals on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                        modal.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                }
+            });
+
+            // Expose modal openers
+            window.openAffiliateModal = function() {
+                openModal('affiliateModal');
+            };
+
+            window.openPaywallModal = function() {
+                openModal('paywallModal');
+            };
+
+            window.openEnterpriseModal = function() {
+                openModal('enterpriseModal');
+            };
 
             // --- Event Handlers ---
 
@@ -733,8 +1240,12 @@
             maxWidthSelect.addEventListener('change', () => {
                 if (maxWidthSelect.value === '0') {
                     maxWidthValue.textContent = 'No limit';
+                } else if (maxWidthSelect.value === '3840') {
+                    maxWidthValue.textContent = '3840 px (4K)';
+                    upgrade4kNotice.classList.remove('hidden');
                 } else {
                     maxWidthValue.textContent = maxWidthSelect.value + ' px';
+                    upgrade4kNotice.classList.add('hidden');
                 }
             });
 
@@ -750,13 +1261,11 @@
             // --- Core Functions ---
 
             function handleFile(file) {
-                // Validate file type
                 if (!file.type.startsWith('image/')) {
                     showToast('Please select a valid image file', 'error');
                     return;
                 }
 
-                // Validate file size (50MB max)
                 if (file.size > 50 * 1024 * 1024) {
                     showToast('File is too large. Maximum size is 50MB.', 'error');
                     return;
@@ -777,28 +1286,23 @@
             }
 
             function showPreview(img, file) {
-                // Show preview area, hide upload content
                 uploadContent.classList.add('hidden');
                 previewArea.classList.remove('hidden');
                 statsArea.classList.add('hidden');
 
-                // Set original preview
                 originalPreview.src = img.src;
                 originalBadge.textContent = formatBytes(file.size);
 
-                // Reset compressed area
                 compressedPreview.src = '';
                 compressedPreview.classList.add('opacity-30');
                 compressedBadge.textContent = '--';
                 compressedBtnState(false);
 
-                // Reset stats
                 compressedSize.textContent = '--';
                 spaceSaved.textContent = '--';
                 compressionRatio.textContent = '--';
                 downloadBtn.disabled = true;
 
-                // Scroll to preview
                 previewArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
 
@@ -825,7 +1329,17 @@
                 const outputMime = getOutputMimeType();
                 const maxSize = parseInt(maxSizeSelect.value);
 
-                // Calculate new dimensions
+                // Check if 4K is selected (paywalled)
+                if (maxWidth === 3840) {
+                    isCompressing = false;
+                    compressBtn.classList.remove('processing');
+                    compressIcon.classList.remove('animate-spin');
+                    compressedPreview.classList.remove('opacity-30');
+                    showToast('4K export requires Pro plan. Upgrade to unlock!', 'info', 5000);
+                    setTimeout(() => openPaywallModal(), 1500);
+                    return;
+                }
+
                 let width = originalImage.width;
                 let height = originalImage.height;
 
@@ -834,22 +1348,17 @@
                     width = maxWidth;
                 }
 
-                // Create canvas
                 const canvas = document.createElement('canvas');
                 canvas.width = width;
                 canvas.height = height;
                 const ctx = canvas.getContext('2d');
-
-                // Draw image
                 ctx.drawImage(originalImage, 0, 0, width, height);
 
-                // Try to compress with decreasing quality if maxSize is set
                 if (maxSize > 0) {
                     let attempts = [quality, quality * 0.8, quality * 0.6, quality * 0.4, quality * 0.2, 0.1];
                     let found = false;
 
                     for (const q of attempts) {
-                        // Use requestAnimationFrame to let UI update
                         requestAnimationFrame(() => {
                             canvas.toBlob((blob) => {
                                 if (blob && blob.size <= maxSize) {
@@ -859,7 +1368,6 @@
                                     found = true;
                                     finishCompression();
                                 } else if (q === attempts[attempts.length - 1]) {
-                                    // Last attempt - use whatever we got
                                     if (blob) {
                                         compressedBlob = blob;
                                         compressedDataUrl = URL.createObjectURL(blob);
@@ -870,18 +1378,9 @@
                                 }
                             }, outputMime, q);
                         });
-
                         if (found) break;
-
-                        // Wait a bit between attempts
-                        // Using a synchronous approach with try/catch for the blob
-                        try {
-                            const blob = canvas.toDataURL(outputMime, q);
-                            // This won't work for size checking, need to use blob approach
-                        } catch(e) {}
                     }
                 } else {
-                    // No size limit - single compression
                     canvas.toBlob((blob) => {
                         if (blob) {
                             compressedBlob = blob;
@@ -901,6 +1400,16 @@
                         compressedPreview.classList.remove('opacity-30');
                         statsArea.classList.remove('hidden');
                         downloadBtn.disabled = false;
+                        
+                        compressionCount++;
+                        
+                        // Show affiliate offer after 1+ compressions
+                        if (compressionCount >= 1 && !hasShownAffiliate) {
+                            hasShownAffiliate = true;
+                            affiliateOffer.classList.remove('hidden');
+                            showToast('Check out these tools for your next project!', 'info', 4000);
+                        }
+                        
                         showToast('Image compressed successfully!', 'success');
                     } else {
                         compressedPreview.classList.add('opacity-30');
@@ -913,7 +1422,6 @@
                 compressedPreview.src = compressedDataUrl;
                 compressedBadge.textContent = formatBytes(blob.size);
 
-                // Update stats
                 const origSize = originalFile.size;
                 const compSize = blob.size;
                 const saved = origSize - compSize;
@@ -924,9 +1432,7 @@
                 spaceSaved.className = `text-xl font-bold mt-1 ${saved > 0 ? 'text-accent' : 'text-slate-400'}`;
                 compressionRatio.textContent = ratio + '%';
 
-                // Store for download
                 compressedBlob = blob;
-
                 showToast(`Compressed from ${formatBytes(origSize)} to ${formatBytes(compSize)} (${ratio}% smaller)`, 'success');
             }
 
@@ -954,6 +1460,11 @@
 
                 compressBtn.classList.remove('processing');
                 compressIcon.classList.remove('animate-spin');
+                
+                // Reset affiliate offer visibility
+                affiliateOffer.classList.add('hidden');
+                hasShownAffiliate = false;
+                compressionCount = 0;
 
                 showToast('Reset complete', 'info');
             });
@@ -961,12 +1472,10 @@
             downloadBtn.addEventListener('click', () => {
                 if (!compressedBlob) return;
 
-                // Determine filename
                 const origName = originalFile.name;
                 const ext = getFileExtension(origName);
                 const baseName = origName.replace(/\.[^/.]+$/, '');
                 
-                // Use appropriate extension
                 let outExt = 'png';
                 const mime = getOutputMimeType();
                 if (mime === 'image/jpeg') outExt = 'jpg';
@@ -975,7 +1484,6 @@
 
                 const fileName = `${baseName}_compressed.${outExt}`;
 
-                // Download
                 const url = URL.createObjectURL(compressedBlob);
                 const a = document.createElement('a');
                 a.href = url;
@@ -986,6 +1494,11 @@
                 URL.revokeObjectURL(url);
 
                 showToast('Download started!', 'success');
+            });
+
+            // Bulk upgrade button
+            bulkUpgradeBtn.addEventListener('click', () => {
+                openPaywallModal();
             });
 
             // Keyboard shortcuts
@@ -1002,24 +1515,43 @@
             // Initialize quality display
             qualityValue.textContent = qualitySlider.value + '%';
 
+            // Initialize 4K notice
+            upgrade4kNotice.classList.add('hidden');
+
             console.log('Free Image Compressor loaded successfully!');
             console.log('Built with ❤️ by Yuvi1192p');
+            console.log('Monetization: Affiliate offers + Paywall + Enterprise leads + Tips');
         })();
-    </script>
 
-    <!-- AdSense async script placeholder -->
-    <!-- 
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-    -->
+        // Enterprise form handler
+        function handleEnterpriseSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('entName').value;
+            const email = document.getElementById('entEmail').value;
+            const company = document.getElementById('entCompany').value;
+            const needs = document.getElementById('entNeeds').value;
+            const budget = document.getElementById('entBudget').value;
 
-    <!-- BuyMeACoffee widget placeholder -->
-    <!-- 
-    <script>
-        bmccount_dashboard("Yuvi1192p", "default");
+            // In production, this would POST to your backend or CRM
+            // For now, construct an email draft
+            const subject = encodeURIComponent('Enterprise Image Compressor Inquiry - ' + company);
+            const body = encodeURIComponent(
+                `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nNeeds: ${needs}\nVolume: ${budget}\nSource: free-image-compressor widget`
+            );
+            
+            // Open mailto as fallback
+            window.location.href = `mailto:enterprise@yuvi1192p.dev?subject=${subject}&body=${body}`;
+            
+            // Show success toast
+            showToast('Inquiry submitted! We\'ll contact you within 2-4 hours.', 'success');
+            
+            // Close modal
+            closeModal('enterpriseModal');
+            
+            // Reset form
+            document.getElementById('enterpriseForm').reset();
+        }
     </script>
-    -->
 
     <!-- Structured Data for SEO -->
     <script type="application/ld+json">
@@ -1071,15 +1603,6 @@
                     "target": "https://yuvi1192p.github.io/free-image-compressor/",
                     "query-input": "required name=query"
                 }
-            },
-            {
-                "@type": "ImageObject",
-                "name": "Free Image Compressor Preview",
-                "description": "Screenshot of the Free Image Compressor web application showing the drag-and-drop interface",
-                "url": "https://yuvi1192p.github.io/free-image-compressor/og-image.png",
-                "width": 1200,
-                "height": 630,
-                "encodingFormat": "image/png"
             }
         ]
     }
